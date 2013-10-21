@@ -1,4 +1,4 @@
 angular-json
 ============
 
-Angular.js JSON-Editor
+A Angular.js JSON-Editor
