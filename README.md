@@ -1,4 +1,6 @@
 angular-json
 ============
 
-A Angular.js JSON-Editor
+Angular JSON-Editor
+
+License: MIT

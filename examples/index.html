@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html ng-app="angular-json">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>AngularJS JSON-Editor</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="../components/angular/angular.js"></script>
+    <script src="../src/angular-json.js"></script>
+    <script src="app.js"></script>
+  </head>
+
+  <body>
+    <div id="editor">
+      <div ng-controller="EditorCtrl">
+        <button class="sectionButton sectionTextEditorButton" ng-click="selectSection('text_editor')">Text Editor</button>
+        <button class="sectionButton sectionOpeningHoursButton" ng-click="selectSection('opening_hours')">Öffnungszeiten</button>
+        <button class="sectionButton sectionCategoriesButton" ng-click="selectSection('categories')">Kategorien</button>
+        <button class="sectionButton sectionProductsButton" ng-click="selectSection('products')">Produkte</button>
+      
+        <div ng-show="model.activeSection === 'text_editor'">
+          <h2>JSON Texteditor</h2>
+          <div jsn-text-editor="model.shopdata"></div>
+        </div>
+        
+        <div ng-show="model.activeSection === 'opening_hours'">
+          <h2>Öffnungszeiten</h2>
+          <p jsn-addable="model.shopdata.opening_hours" jsn-collection-type="object" jsn-type="array" jsn-placeholder="Wochentag"></p>
+          <table>
+            <tr>
+              <th>Wochentag</th>
+              <th>Zeitspanne</th>
+              <th>X</th>
+            </tr>
+            <tr ng-repeat="(key, value) in model.shopdata.opening_hours">
+              <td jsn-editable="key" jsn-type="propertyname" jsn-collection="model.shopdata.opening_hours"></td>
+              <td>
+                <span jsn-addable="value" jsn-collection-type="array" jsn-type="array" jsn-placeholder="neue Zeitspanne"></span>
+                <table>
+                  <tr>
+                    <th>Startzeit</th>
+                    <th>Endzeit</th>
+                    <th>X</th>
+                  </tr>
+                  <tr ng-repeat="(intervalKey, intervalValue) in value">
+                    <td jsn-editable="intervalValue[0]" jsn-type="string"></td>
+                    <td jsn-editable="intervalValue[1]" jsn-type="string"></td>
+                    <td jsn-removeable="intervalKey" jsn-collection="value"></td>
+                  </tr>
+                </table>
+              </td>
+              <td jsn-removeable="key" jsn-collection="model.shopdata.opening_hours"></td>
+            </tr>
+          </table>
+        </div>
+        
+      </div>
+      
+      <div id="categories" ng-controller="CategoryCtrl" ng-show="model.activeSection === 'categories'">
+        <h2>Kategorien</h2>
+        <p jsn-addable="model.shopdata.categories" jsn-collection-type="object" jsn-type="object" jsn-defaults='getCategoryDefaults()' jsn-placeholder="Kategoriename" />
+        <table>
+          <tr>
+            <th>Name</th></th>
+            <th>Größen</th>
+            <th>Beschreibung</th>
+            <th>Aktiv</th>
+            <th>X</th>
+          </tr>
+          <tr ng-repeat="(key, value) in model.shopdata.categories">
+            <td>
+              <span jsn-editable="key" jsn-type="propertyname" jsn-collection="model.shopdata.categories"></span>
+              <button class="jsnLink" ng-click="selectCategory(key)">Produkte</button>
+            </td>
+            <td>
+              <span jsn-addable="value.sizes" jsn-collection-type="array" jsn-type="string" jsn-placeholder="Größe"></span>
+              <table>
+                <tr>
+                  <th>Name</th>
+                  <th>X</th>
+                </tr>
+                <tr class="jsnItem" ng-repeat="(sizeKey, sizeValue) in value.sizes">
+                  <td jsn-editable="value.sizes[sizeKey]" jsn-type="string"></td>
+                  <td jsn-removeable="sizeKey" jsn-collection="value.sizes"></td>
+                </tr>
+              </table>
+            </td>
+            <td jsn-editable="value.description" jsn-type="text" />
+            <td jsn-editable="value.active" jsn-type="boolean" />
+            <td jsn-removeable="key" jsn-collection="model.shopdata.categories" />
+          </tr>
+        </table>
+      </div>
+  
+      <div ng-show="model.activeSection === 'products'" ng-controller="ProductCtrl">
+        <h2>Produkte</h2>
+        <h4 class="categoryFilter">Filtern nach Kategorie: <span jsn-editable="model.activeCategory" jsn-type="select" jsn-options="getCategoryNames()"></span></h4>
+        <p jsn-addable="model.shopdata.products" jsn-collection-type="object" jsn-type="object" jsn-defaults='getProductDefaults()' jsn-placeholder="Nummer" />
+        <table>
+          <tr>
+            <th>#</th>
+            <th>Name</th></th>
+            <th>Kategorie</th>
+            <th>Preis</th>
+            <th>Zutaten</th>
+            <th>Aktiv</th>
+            <th>X</th>
+          </tr>
+          <tr ng-repeat="(key, value) in model.shopdata.products | objectFilter:{category:model.activeCategory}">
+            <td jsn-editable="key" jsn-type="propertyname" jsn-collection="model.shopdata.products"></td>
+            <td jsn-editable="value.name" jsn-type="string"></td>
+            <td jsn-editable="value.category" jsn-type="select" jsn-options="getCategoryNames()"></td>
+            <td>
+              <span jsn-addable="value.price" jsn-collection-type="array" jsn-type="float" jsn-placeholder="Preis hinzufügen"></span>
+              <table>
+                <tr>
+                  <th>Größe</th>
+                  <th>Preis</th>
+                  <th>X</th>
+                </tr>
+                <tr ng-repeat="(sizeKey, sizeValue) in value.price">
+                  <td ng-bind="model.shopdata.categories[value.category].sizes[sizeKey]"></td>
+                  <td jsn-editable="value.price[sizeKey]" jsn-type="float"></td>
+                  <td jsn-removeable="sizeKey" jsn-collection="value.price"></td>
+                </tr>
+              </table>
+            </td>
+            <td>
+              <span jsn-addable="value.ingredients" jsn-collection-type="array" jsn-type="string" jsn-placeholder="Zutat hinzufügen"></span>
+              <table>
+                <tr>
+                  <th>Zutat</th>
+                  <th>X</th>
+                </tr>
+                <tr ng-repeat="(ingredientKey, ingredientValue) in value.ingredients">
+                  <td jsn-editable="value.ingredients[ingredientKey]" jsn-type="string" jsn-placeholder="Zutat"></td>
+                  <td jsn-removeable="ingredientKey" jsn-collection="value.ingredients"></td>
+                </tr>
+              </table>
+            </td>
+            <td jsn-editable="value.active" jsn-type="boolean" />
+            <td jsn-removeable="key" jsn-collection="model.shopdata.products" />
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

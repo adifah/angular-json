@@ -1,0 +1,126 @@
+/* Styles go here */
+
+body {
+  font-family: 'Arial';
+  font-size: 14px;
+  color: #111;
+  background-color: #ecf0f1;
+}
+input {
+  width: 90px;
+  margin: 0 3px 0 0;
+  padding: 0;
+}
+table {
+  width: 100%;
+  max-width: 100%;
+  table-layout:auto;
+}
+table, th, td {
+  border: 1px solid #34495e;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+th {
+  background-color: #3498db;
+  color: #fff;
+  padding: 1px 3px;
+  min-width: 90px;
+}
+td {
+  vertical-align:top;
+  padding: 3px;
+  background-color: #f8fcfd;
+  white-space: normal; 
+  word-break: break-all;
+}
+#editor {
+  width: 100%;
+  max-width: 100%;
+}
+.jsnValue {
+  background-color: #bdc3c7;
+  cursor: pointer;
+  padding: 2px 7px;
+  color: #000;
+  display: block;
+}
+
+.jsnItem {
+  border: 1px solid #000;
+  padding: 1px 0;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+button {
+  margin: 0;
+  border-radius: 0;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 110%;
+  color: #fff;
+}
+.jsnAdd {
+  background-color: #27ae60;
+}
+.jsnCancel {
+  background-color: #9b59b6;
+  margin-left: 3px;
+}
+.jsnLink {
+  background-color: #9b59b6;
+  margin-top: 3px;
+}
+.jsnAddable {
+  margin-bottom: 3px;
+}
+.jsnEmpty {
+  background-color: #f1c40f;
+}
+.jsnValid {
+  padding: 2px;
+  color: white;
+  background-color: #27ae60;
+}
+.jsnInvalid {
+  padding: 2px;
+  color: white;
+  background-color: #e74c3c;
+}
+.jsnRemove {
+  background-color: #e74c3c;
+}
+tr:hover td{
+  background-color: #eee;
+}
+.sectionButton {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 3px;
+}
+.sectionTextEditorButton {
+  background-color: #1abc9c;
+}
+.sectionOpeningHoursButton {
+  background-color: #3498db;
+}
+.sectionCategoriesButton {
+  background-color: #e74c3c;
+}
+.sectionProductsButton {
+  background-color: #9b59b6;
+}
+.jsnTextEditor {
+  width: 90%;
+  height: 300px;
+}
+.categoryFilter .jsnValue {
+  display: inline;
+}
+
+
+
+
+
+
